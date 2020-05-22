@@ -18,6 +18,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- data binding for the GameViewModel -->
+    <data>
+        <variable
+            name="gameViewModel"
+            type="com.example.android.guesstheword.screens.game.GameViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/game_layout"
         android:layout_width="match_parent"
@@ -43,6 +50,7 @@
 
         <TextView
             android:id="@+id/word_text"
+            android:text="@{@string/quote_format(gameViewModel.word)}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
@@ -57,7 +65,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/word_is_text"
             app:layout_constraintVertical_chainStyle="packed"
-            tools:text="&quot;Tuna&quot;" />
+            tools:text="&quot;Tuna&quot;"/>
 
         <TextView
             android:id="@+id/timer_text"
@@ -73,10 +81,28 @@
             app:layout_constraintBottom_toTopOf="@+id/score_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:text="@{gameViewModel.currentTimeString}"
             tools:text="0:00" />
 
         <TextView
+            android:id="@+id/hint_text"
+            android:layout_width="223dp"
+            android:layout_height="61dp"
+            android:textAlignment="center"
+            tools:text="@string/hint_to_guess_the_word"
+            android:text="@{gameViewModel.wordHint}"
+            android:textColor="@color/black_text_color"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@+id/timer_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/word_text"
+            app:layout_constraintVertical_bias="0.171" />
+
+        <TextView
             android:id="@+id/score_text"
+            android:text="@{@string/score_format(gameViewModel.score)}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -100,7 +126,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline" />
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            android:onClick="@{ () -> gameViewModel.onSkip() }"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -120,7 +147,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/end_game_button"
             app:layout_constraintStart_toEndOf="@+id/skip_button"
-            app:layout_constraintTop_toTopOf="@+id/guideline" />
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            android:onClick="@{ () -> gameViewModel.onCorrect() }"/>/>
 
         <Button
             android:id="@+id/end_game_button"
@@ -131,7 +159,10 @@
             android:theme="@style/SkipButton"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline" />
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            android:onClick="@{ () -> gameViewModel.onGameFinish() }"/>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
